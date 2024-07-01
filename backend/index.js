@@ -1,7 +1,15 @@
 import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
+import { expressMiddleware } from '@apollo/server/express4';
+import cors from 'cors';
+import express from 'express';
 import mergedResolver from './resolvers/index.js';
 import mergedTypeDefs from './typeDefs/index.js';
+import * as dotenv from 'dotenv'
+import connectDB from './db/connectDB.js';
+const app = express();
+
+dotenv.config();
+
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({
@@ -9,12 +17,9 @@ const server = new ApolloServer({
     resolvers: mergedResolver
 });
 
-// Passing an ApolloServer instance to the `startStandaloneServer` function:
-//  1. creates an Express app
-//  2. installs your ApolloServer instance as middleware
-//  3. prepares your app to handle incoming requests
-const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
-});
+await server.start();
+await connectDB();
+app.use('/', cors(), express.json(), expressMiddleware(server));
 
-console.log(`🚀  Server ready at: ${url}`);
+
+app.listen(4000, "localhost", () => "Your App is listening");
