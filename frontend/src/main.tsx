@@ -9,7 +9,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
-      <BackgroundBeams />
+      {/* change background beams color to dark */}
+      <BackgroundBeams className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900" />
     </BrowserRouter>
   </React.StrictMode>
 );
