@@ -1,7 +1,6 @@
-import { genSalt, hash } from 'bcryptjs';
-import { users } from '../dummy_data/data.js'
 import UserModel from '../models/user.model.js';
-
+import pkg from 'bcryptjs';
+const { genSalt, hash } = pkg;
 const userResolver = {
     Query: {
         authUser: async (_, __, context) => {
@@ -40,9 +39,8 @@ const userResolver = {
                     throw new Error("User Already Exists")
                 }
 
-                const salt = genSalt(10);
+                const salt = await genSalt(10);
                 const hashedPass = await hash(password, salt);
-
                 const maleProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
                 const femaleProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 

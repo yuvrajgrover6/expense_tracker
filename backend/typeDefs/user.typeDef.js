@@ -14,12 +14,12 @@ type User {
     }
 
     type Mutation {
-        signup(input:SignupInput!) : User
+        signUp(input:SignUpInput!) : User
         login(input:LoginInput!) : User
         logout:LogoutResponse
     }
 
-    input SignupInput {
+    input SignUpInput {
         username:String!
         name:String!
         password:String!

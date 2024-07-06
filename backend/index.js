@@ -18,6 +18,7 @@ const app = express();
 dotenv.config();
 
 configurePassport()
+await connectDB();
 
 const MongoDbStore = ConnectMongoDBSession(session);
 const store = new MongoDbStore({
@@ -56,12 +57,19 @@ const server = new ApolloServer({
 });
 
 await server.start();
-await connectDB();
+
+
+
+
+
 app.use('/',
-    cors({
-        origin: "localhost:4000",
-        credentials: true
-    }),
+    cors(
+        {
+            origin: "http://localhost:3000",
+            credentials: true
+        }
+
+    ),
     express.json(),
     expressMiddleware(server,
         { context: async ({ req, res }) => buildContext({ req, res }) }

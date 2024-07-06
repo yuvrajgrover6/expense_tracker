@@ -5,12 +5,14 @@ import LoginPage from "./pages/LoginPage";
 import TransactionPage from "./pages/TransactionPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Header from "./components/ui/Header";
-
+import { QueryResult, useQuery } from "@apollo/client";
+import GET_USER from "./graphql/queries/user.query";
+import { Toaster } from "react-hot-toast";
 export default function App() {
-  const authUser = true;
+  const { loading, data, error }: QueryResult | undefined = useQuery(GET_USER);
   return (
     <>
-      {authUser && <Header />}
+      {data?.authUser && <Header />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -18,6 +20,7 @@ export default function App() {
         <Route path="/transaction/:id" element={<TransactionPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Toaster />
     </>
   );
 }
