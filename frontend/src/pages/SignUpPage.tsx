@@ -13,7 +13,9 @@ const SignUpPage = () => {
     gender: "",
   });
 
-  const [signUp, { error, loading }] = useMutation(SIGN_UP);
+  const [signUp, { error, loading }] = useMutation(SIGN_UP, {
+    refetchQueries: ["GetAuthenticatedUser"],
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;

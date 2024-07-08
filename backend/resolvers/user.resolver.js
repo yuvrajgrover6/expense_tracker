@@ -11,6 +11,7 @@ const userResolver = {
             }
             catch (e) {
                 console.error("Error aut user")
+                throw new Error("User Not Found")
             }
 
         },
@@ -21,6 +22,7 @@ const userResolver = {
             }
             catch (e) {
                 console.error("Error fetching user")
+                throw new Error("User Not Found")
             }
 
         }
@@ -61,6 +63,7 @@ const userResolver = {
             }
             catch (e) {
                 console.log(e)
+                throw new Error(e.message)
 
 
             }
@@ -77,6 +80,7 @@ const userResolver = {
             }
             catch (e) {
                 console.log("Error in login")
+                throw new Error("Invalid Credentials")
             }
         }
         ,
@@ -84,15 +88,16 @@ const userResolver = {
 
             try {
                 await context.logout();
-                req.session.destroy((err) => {
+                await context.req.session.destroy((err) => {
                     if (err) throw err;
                 });
-                res.clearCookie("connect.sid");
+                context.res.clearCookie("connect.sid");
                 return { message: "Logged Out Successfully" }
 
             }
             catch (e) {
                 console.log("Error in logout")
+                throw new Error("Error in logout")
 
             }
 
