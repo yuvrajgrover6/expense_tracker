@@ -9,6 +9,7 @@ import { useMutation } from "@apollo/client";
 import { DELETE_TRANSACTION } from "../graphql/mutations/transaction.mutation";
 import { GET_TRANSACTIONS } from "../graphql/queries/transaction.query";
 import toast from "react-hot-toast";
+import { GET_USER_AND_TRANSACTIONS } from "../graphql/queries/user.query";
 
 const categoryColorMap = {
   saving: "from-green-700 to-green-400",
@@ -27,7 +28,7 @@ const Card = ({
   const cardClass: string = categoryColorMap[transaction.category];
 
   const [deleteTransaction, { loading }] = useMutation(DELETE_TRANSACTION, {
-    refetchQueries: [GET_TRANSACTIONS],
+    refetchQueries: [GET_USER_AND_TRANSACTIONS],
   });
 
   const deleteQuery = async () => {
@@ -51,7 +52,11 @@ const Card = ({
             {transaction.category}
           </h2>
           <div className="flex items-center gap-2">
-            <FaTrash className={"cursor-pointer"} onClick={deleteQuery} />
+            {!loading ? (
+              <FaTrash className={"cursor-pointer"} onClick={deleteQuery} />
+            ) : (
+              <div className="w-6 h-6 border-t-2 border-b-2 mx-2 rounded-full animate-spin"></div>
+            )}
             <Link to={`/transaction/${transaction._id}`}>
               <HiPencilAlt className="cursor-pointer" size={20} />
             </Link>
