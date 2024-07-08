@@ -28,9 +28,6 @@ const HomePage = () => {
   const { data, loading: categoryLoading, error } = useQuery(CATEGORY_STATS);
   const { data: userData } = useQuery(GET_USER);
 
-  console.log(data);
-  console.log(error?.message);
-
   const [chartData, setChartData] = useState<
     ChartData<"doughnut", never[], never>
   >({
@@ -73,7 +70,6 @@ const HomePage = () => {
           borderColors.push("rgba(75, 192, 192, 1)");
         }
       });
-      console.log(categories, amounts, backgroundColors, borderColors);
       setChartData((prev) => ({
         labels: categories,
         datasets: [

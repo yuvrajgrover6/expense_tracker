@@ -1,3 +1,4 @@
+import TransactionModel from '../models/transaction.model.js';
 import UserModel from '../models/user.model.js';
 import pkg from 'bcryptjs';
 const { genSalt, hash } = pkg;
@@ -103,6 +104,21 @@ const userResolver = {
 
         }
 
+    },
+    User: {
+        transactions: async (parent, _, context) => {
+            try {
+
+                const transactions = await TransactionModel.find({ userId: parent._id });
+                console.log("Transactions", transactions)
+                return transactions;
+            }
+            catch (e) {
+                console.error("Error Getting Transactions", err);
+                throw new Error("Error Getting Transactions")
+
+            }
+        },
     }
 }
 

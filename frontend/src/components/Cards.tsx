@@ -1,9 +1,17 @@
 import { useQuery } from "@apollo/client";
 import Card, { Transaction } from "./Card";
-import { GET_TRANSACTIONS } from "../graphql/queries/transaction.query";
+import GET_USER, {
+  GET_USER_AND_TRANSACTIONS,
+} from "../graphql/queries/user.query";
 
 const Cards = () => {
-  const { data, error, loading } = useQuery(GET_TRANSACTIONS);
+  const { data: authUser } = useQuery(GET_USER);
+  const { data, error, loading } = useQuery(GET_USER_AND_TRANSACTIONS, {
+    variables: {
+      userId: authUser?.authUser._id,
+    },
+  });
+  console.log("data", data);
 
   return (
     <div className="w-full px-10 min-h-[40vh]">
@@ -14,8 +22,12 @@ const Cards = () => {
             Loading Transactions...
           </span>
         ) : (
-          data?.transactions.map((transaction: Transaction) => (
-            <Card transaction={transaction} key={transaction._id} />
+          data?.user.transactions.map((transaction: Transaction) => (
+            <Card
+              transaction={transaction}
+              key={transaction._id}
+              profilePic={data?.user?.profilePic || ""}
+            />
           ))
         )}
       </div>

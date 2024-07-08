@@ -17,7 +17,13 @@ const categoryColorMap = {
   // Add more categories and corresponding color classes as needed
 };
 
-const Card = ({ transaction }: { transaction: Transaction }) => {
+const Card = ({
+  transaction,
+  profilePic,
+}: {
+  transaction: Transaction;
+  profilePic: string;
+}) => {
   const cardClass: string = categoryColorMap[transaction.category];
 
   const [deleteTransaction, { loading }] = useMutation(DELETE_TRANSACTION, {
@@ -71,7 +77,11 @@ const Card = ({ transaction }: { transaction: Transaction }) => {
           <p className="text-xs text-black font-bold">
             {new Date(+transaction.date).toDateString()}
           </p>
-          <img src={""} className="h-8 w-8 border rounded-full" alt="" />
+          <img
+            src={profilePic}
+            className="h-8 w-8 border rounded-full"
+            alt=""
+          />
         </div>
       </div>
     </div>

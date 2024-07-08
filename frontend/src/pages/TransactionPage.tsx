@@ -12,6 +12,8 @@ const TransactionPage = () => {
     variables: { transactionId: id },
   });
 
+  console.log("data", data);
+
   const [formData, setFormData] = useState({
     description: "",
     paymentType: "",

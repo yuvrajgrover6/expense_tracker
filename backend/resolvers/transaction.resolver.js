@@ -81,7 +81,6 @@ const transactionResolver = {
         updateTransaction: async (parent, { input }, context) => {
 
             try {
-                console.log(input);
                 const transaction = await TransactionModel.findByIdAndUpdate(input._id, input, { new: true });
                 return transaction;
             }
@@ -103,7 +102,20 @@ const transactionResolver = {
             }
         }
 
-    }
+    },
+    Transaction: {
+        user: async (parent) => {
+            try {
+                console.log(parent.userId);
+                const user = await UserModel.findById(parent.userId);
+                return user;
+            }
+            catch (err) {
+                console.error("Error Getting User", err);
+                throw new Error("Error Getting User")
+            }
+        }
+    },
 }
 
 
