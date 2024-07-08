@@ -8,7 +8,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: "http://localhost:4000/graphql",
+  uri: "https://expense-tracker-1rv0.onrender.com/graphql",
   credentials: "include",
 });
 
