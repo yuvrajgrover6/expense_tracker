@@ -13,17 +13,18 @@ import { buildContext } from 'graphql-passport';
 import { configurePassport } from './passport/passport.config.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-
+import job from './cron.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+import http from 'http';
 
 const app = express();
-
+job.start();
 dotenv.config();
+const httpServer = http.createServer(app);
 
-configurePassport()
-await connectDB();
 
+configurePassport();
 const MongoDbStore = ConnectMongoDBSession(session);
 const store = new MongoDbStore({
     uri: process.env.MONGO_URI,
@@ -73,7 +74,7 @@ await server.start();
 
 
 
-app.use('/',
+app.use('/graphql',
     cors(
         {
             origin: "http://localhost:3000",
@@ -87,4 +88,7 @@ app.use('/',
     ));
 
 
-app.listen(4000, "localhost", () => "Your App is listening");
+await new Promise(resolve => httpServer.listen(4000, resolve));
+await connectDB();
+
+console.log(`🚀 Server ready at http://localhost:4000/${server.graphqlPath}`);
