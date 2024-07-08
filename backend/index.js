@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import cors from 'cors';
 import express from 'express';
 import mergedResolver from './resolvers/index.js';
@@ -48,7 +49,7 @@ app.use(
 
 
 app.use(express.static(join(__dirname, '../frontend/dist')));
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
     res.sendFile(join(__dirname, '../frontend/dist', 'index.html'));
 }
 );
@@ -65,7 +66,9 @@ app.use(passport.session());
 // definition and your set of resolvers.
 const server = new ApolloServer({
     typeDefs: mergedTypeDefs,
-    resolvers: mergedResolver
+    resolvers: mergedResolver,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+
 });
 
 await server.start();
