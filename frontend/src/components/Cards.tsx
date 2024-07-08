@@ -31,6 +31,11 @@ const Cards = () => {
           ))
         )}
       </div>
+      {data?.user?.transactions?.length === 0 ? (
+        <p className="text-2xl font-bold text-center text-white">
+          No transactions to show
+        </p>
+      ) : null}
     </div>
   );
 };
