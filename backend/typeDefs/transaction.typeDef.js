@@ -32,7 +32,7 @@ input CreateTransactionInput{
     date: String! 
 }
 input UpdateTransactionInput{
-    transactionId:ID!
+    _id:ID!
     description : String
     paymentType: String
     category : String

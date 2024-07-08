@@ -1,6 +1,17 @@
-import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { GET_TRANSACTION } from "../graphql/queries/transaction.query";
+import TransactionFormSkeleton from "../components/ui/TransactionFormSkeleton";
+import { useParams } from "react-router-dom";
+import { UPDATE_TRANSACTION } from "../graphql/mutations/transaction.mutation";
+import toast from "react-hot-toast";
 
 const TransactionPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const { data, loading, error } = useQuery(GET_TRANSACTION, {
+    variables: { transactionId: id },
+  });
+
   const [formData, setFormData] = useState({
     description: "",
     paymentType: "",
@@ -10,12 +21,46 @@ const TransactionPage = () => {
     date: "",
   });
 
+  const [updateTransaction, { loading: loadingUpdate, error: errorUpdate }] =
+    useMutation(UPDATE_TRANSACTION, {
+      refetchQueries: [GET_TRANSACTION],
+    });
+
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        description: data.transaction.description || "",
+        paymentType: data.transaction.paymentType || "",
+        category: data.transaction.category || "",
+        amount: data.transaction.amount || "",
+        location: data.transaction.location || "",
+        date:
+          new Date(+data.transaction.date).toISOString().substring(0, 10) || "",
+      });
+    }
+  }, [data]);
+
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent
   ) => {
     e.preventDefault();
-    console.log("formData", formData);
+    try {
+      await updateTransaction({
+        variables: {
+          input: {
+            _id: id,
+            ...formData,
+            amount: Number(formData.amount),
+          },
+        },
+      });
+      toast.success("Transaction updated successfully");
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.message);
+    }
   };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -26,10 +71,11 @@ const TransactionPage = () => {
     }));
   };
 
-  // if (loading) return <TransactionFormSkeleton />;
+  if (loading) return <TransactionFormSkeleton />;
+  if (error) return <p>Error loading transaction</p>;
 
   return (
-    <div className="h-screen max-w-4xl mx-auto flex flex-col items-center">
+    <div className="max-h-screen max-w-4xl mx-auto flex flex-col items-center">
       <p className="md:text-4xl text-2xl lg:text-4xl font-bold text-center relative z-50 mb-4 mr-4 bg-gradient-to-r from-pink-600 via-indigo-500 to-pink-400 inline-block text-transparent bg-clip-text">
         Update this transaction
       </p>
@@ -71,8 +117,8 @@ const TransactionPage = () => {
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="paymentType"
                 name="paymentType"
+                value={formData.paymentType}
                 onChange={handleInputChange}
-                defaultValue={formData.paymentType}
               >
                 <option value={"card"}>Card</option>
                 <option value={"cash"}>Cash</option>
@@ -102,8 +148,8 @@ const TransactionPage = () => {
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="category"
                 name="category"
+                value={formData.category}
                 onChange={handleInputChange}
-                defaultValue={formData.category}
               >
                 <option value={"saving"}>Saving</option>
                 <option value={"expense"}>Expense</option>
@@ -186,8 +232,9 @@ const TransactionPage = () => {
           className="text-white font-bold w-full rounded px-4 py-2 bg-gradient-to-br
           from-pink-500 to-pink-500 hover:from-pink-600 hover:to-pink-600"
           type="submit"
+          onClick={handleSubmit}
         >
-          Update Transaction
+          {loadingUpdate ? "Updating..." : "Update Transaction"}
         </button>
       </form>
     </div>

@@ -51,7 +51,8 @@ const transactionResolver = {
         updateTransaction: async (parent, { input }, context) => {
 
             try {
-                const transaction = await TransactionModel.findByIdAndUpdate(input.id, input, { new: true });
+                console.log(input);
+                const transaction = await TransactionModel.findByIdAndUpdate(input._id, input, { new: true });
                 return transaction;
             }
             catch (err) {

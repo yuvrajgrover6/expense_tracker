@@ -5,6 +5,10 @@ import { FaSackDollar } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { HiPencilAlt } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { DELETE_TRANSACTION } from "../graphql/mutations/transaction.mutation";
+import { GET_TRANSACTIONS } from "../graphql/queries/transaction.query";
+import toast from "react-hot-toast";
 
 const categoryColorMap = {
   saving: "from-green-700 to-green-400",
@@ -14,11 +18,30 @@ const categoryColorMap = {
 };
 
 const Card = ({
-  cardType,
+  transaction,
+  picture,
 }: {
-  cardType: "saving" | "expense" | "investment";
+  transaction: Transaction;
+  picture: string;
 }) => {
-  const cardClass: string = categoryColorMap[cardType];
+  const cardClass: string = categoryColorMap[transaction.category];
+
+  const [deleteTransaction, { loading }] = useMutation(DELETE_TRANSACTION, {
+    refetchQueries: [GET_TRANSACTIONS],
+  });
+
+  const deleteQuery = async () => {
+    try {
+      await deleteTransaction({
+        variables: {
+          transactionId: transaction._id,
+        },
+      });
+    } catch (e: any) {
+      console.error(e.message);
+      toast.error(e.message);
+    }
+  };
 
   return (
     <div className={`rounded-md p-4 bg-gradient-to-br ${cardClass}`}>
@@ -26,38 +49,46 @@ const Card = ({
         <div className="flex flex-row items-center justify-between">
           <h2 className="text-lg font-bold text-white">Saving</h2>
           <div className="flex items-center gap-2">
-            <FaTrash className={"cursor-pointer"} />
-            <Link to={`/transaction/123`}>
+            <FaTrash className={"cursor-pointer"} onClick={deleteQuery} />
+            <Link to={`/transaction/${transaction._id}`}>
               <HiPencilAlt className="cursor-pointer" size={20} />
             </Link>
           </div>
         </div>
         <p className="text-white flex items-center gap-1">
           <BsCardText />
-          Description: Salary
+          Description: {transaction.description}
         </p>
         <p className="text-white flex items-center gap-1">
           <MdOutlinePayments />
-          Payment Type: Cash
+          Payment Type: {transaction.paymentType}
         </p>
         <p className="text-white flex items-center gap-1">
           <FaSackDollar />
-          Amount: $150
+          Amount: ${transaction.amount}
         </p>
         <p className="text-white flex items-center gap-1">
           <FaLocationDot />
-          Location: New York
+          Location: {transaction.location}
         </p>
         <div className="flex justify-between items-center">
-          <p className="text-xs text-black font-bold">21 Sep, 2001</p>
-          <img
-            src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
-            className="h-8 w-8 border rounded-full"
-            alt=""
-          />
+          <p className="text-xs text-black font-bold">
+            {new Date(+transaction.date).toDateString()}
+          </p>
+          <img src={picture} className="h-8 w-8 border rounded-full" alt="" />
         </div>
       </div>
     </div>
   );
 };
 export default Card;
+
+export interface Transaction {
+  _id: string;
+  description: string;
+  paymentType: string;
+  category: "investment" | "saving" | "expense";
+  amount: number;
+  location: string;
+  date: Date;
+}

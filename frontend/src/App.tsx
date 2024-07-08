@@ -11,13 +11,20 @@ import { Toaster } from "react-hot-toast";
 export default function App() {
   const { loading, data, error }: QueryResult | undefined = useQuery(GET_USER);
   if (loading) return null;
+  let authUser = data?.authUser;
   return (
     <>
-      {data?.authUser && <Header />}
+      {authUser && <Header />}
       <Routes>
         <Route
           path="/"
-          element={data?.authUser ? <HomePage /> : <Navigate to="/login" />}
+          element={
+            data?.authUser ? (
+              <HomePage user={authUser} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
         <Route
           path="/login"

@@ -15,11 +15,12 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ApolloProvider client={client}>
-        <App />
-      </ApolloProvider>
-      {/* change background beams color to dark */}
-      <BackgroundBeams className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 " />
+      <BackgroundBeams className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 -z-30">
+        <ApolloProvider client={client}>
+          <App />
+        </ApolloProvider>
+        {/* change background beams color to dark */}
+      </BackgroundBeams>
     </BrowserRouter>
   </React.StrictMode>
 );

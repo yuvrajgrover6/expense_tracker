@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const HomePage = () => {
+const HomePage = ({ user }: { user: any }) => {
   const [logout, { error, loading }] = useMutation(LOGOUT, {
     refetchQueries: ["GetAuthenticatedUser"],
   });
@@ -57,7 +57,7 @@ const HomePage = () => {
             Spend wisely, track wisely
           </p>
           <img
-            src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
+            src={user.profilePic}
             className="w-11 h-11 rounded-full border cursor-pointer"
             alt="Avatar"
           />
@@ -79,7 +79,7 @@ const HomePage = () => {
 
           <TransactionForm />
         </div>
-        <Cards />
+        <Cards picture={user.profilePic} />
       </div>
     </>
   );
