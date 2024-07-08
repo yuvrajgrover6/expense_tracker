@@ -77,7 +77,7 @@ await server.start();
 
 
 
-const corsOrigins = ["https://expense-tracker-1rv0.onrender.com/graphql", "http://localhost:3000/graphql"];
+const corsOrigins = ["https://expense-tracker-1rv0.onrender.com/graphql", "http://localhost:3000/graphql", "https://expense-tracker-1rv0.onrender.com/", "http://localhost:3000"];
 
 
 app.use('/graphql',
