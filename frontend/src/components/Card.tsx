@@ -17,13 +17,7 @@ const categoryColorMap = {
   // Add more categories and corresponding color classes as needed
 };
 
-const Card = ({
-  transaction,
-  picture,
-}: {
-  transaction: Transaction;
-  picture: string;
-}) => {
+const Card = ({ transaction }: { transaction: Transaction }) => {
   const cardClass: string = categoryColorMap[transaction.category];
 
   const [deleteTransaction, { loading }] = useMutation(DELETE_TRANSACTION, {
@@ -47,7 +41,9 @@ const Card = ({
     <div className={`rounded-md p-4 bg-gradient-to-br ${cardClass}`}>
       <div className="flex flex-col gap-3">
         <div className="flex flex-row items-center justify-between">
-          <h2 className="text-lg font-bold text-white">Saving</h2>
+          <h2 className="text-lg font-bold text-white">
+            {transaction.category}
+          </h2>
           <div className="flex items-center gap-2">
             <FaTrash className={"cursor-pointer"} onClick={deleteQuery} />
             <Link to={`/transaction/${transaction._id}`}>
@@ -75,7 +71,7 @@ const Card = ({
           <p className="text-xs text-black font-bold">
             {new Date(+transaction.date).toDateString()}
           </p>
-          <img src={picture} className="h-8 w-8 border rounded-full" alt="" />
+          <img src={""} className="h-8 w-8 border rounded-full" alt="" />
         </div>
       </div>
     </div>

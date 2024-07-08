@@ -18,13 +18,7 @@ export default function App() {
       <Routes>
         <Route
           path="/"
-          element={
-            data?.authUser ? (
-              <HomePage user={authUser} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
+          element={data?.authUser ? <HomePage /> : <Navigate to="/login" />}
         />
         <Route
           path="/login"

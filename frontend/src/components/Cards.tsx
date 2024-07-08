@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import Card, { Transaction } from "./Card";
 import { GET_TRANSACTIONS } from "../graphql/queries/transaction.query";
 
-const Cards = ({ picture }: { picture: string }) => {
+const Cards = () => {
   const { data, error, loading } = useQuery(GET_TRANSACTIONS);
 
   return (
@@ -15,11 +15,7 @@ const Cards = ({ picture }: { picture: string }) => {
           </span>
         ) : (
           data?.transactions.map((transaction: Transaction) => (
-            <Card
-              transaction={transaction}
-              key={transaction._id}
-              picture={picture}
-            />
+            <Card transaction={transaction} key={transaction._id} />
           ))
         )}
       </div>
