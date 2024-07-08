@@ -6,7 +6,7 @@ import GET_USER, {
 
 const Cards = () => {
   const { data: authUser } = useQuery(GET_USER);
-  const { data, error, loading } = useQuery(GET_USER_AND_TRANSACTIONS, {
+  const { data, loading } = useQuery(GET_USER_AND_TRANSACTIONS, {
     variables: {
       userId: authUser?.authUser._id,
     },

@@ -25,7 +25,7 @@ const HomePage = () => {
     refetchQueries: ["GetAuthenticatedUser"],
   });
 
-  const { data, loading: categoryLoading, error } = useQuery(CATEGORY_STATS);
+  const { data } = useQuery(CATEGORY_STATS);
   const { data: userData } = useQuery(GET_USER);
 
   const [chartData, setChartData] = useState<

@@ -7,7 +7,6 @@ import { HiPencilAlt } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { DELETE_TRANSACTION } from "../graphql/mutations/transaction.mutation";
-import { GET_TRANSACTIONS } from "../graphql/queries/transaction.query";
 import toast from "react-hot-toast";
 import { GET_USER_AND_TRANSACTIONS } from "../graphql/queries/user.query";
 

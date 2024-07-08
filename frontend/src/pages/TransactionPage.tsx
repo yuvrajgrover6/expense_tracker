@@ -23,10 +23,12 @@ const TransactionPage = () => {
     date: "",
   });
 
-  const [updateTransaction, { loading: loadingUpdate, error: errorUpdate }] =
-    useMutation(UPDATE_TRANSACTION, {
+  const [updateTransaction, { loading: loadingUpdate }] = useMutation(
+    UPDATE_TRANSACTION,
+    {
       refetchQueries: [GET_TRANSACTION],
-    });
+    }
+  );
 
   useEffect(() => {
     if (data) {

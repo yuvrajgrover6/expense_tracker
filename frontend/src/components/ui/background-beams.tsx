@@ -1,5 +1,5 @@
 "use client";
-import React, { PropsWithChildren, ReactNode } from "react";
+import React, { PropsWithChildren } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../utils/cn";
 interface BackgroundBeamsProps extends PropsWithChildren {
@@ -92,7 +92,7 @@ export const BackgroundBeams: React.FC<BackgroundBeamsProps> = React.memo(
               ></motion.path>
             ))}
             <defs>
-              {paths.map((path, index) => (
+              {paths.map((index) => (
                 <motion.linearGradient
                   id={`linearGradient-${index}`}
                   key={`gradient-${index}`}

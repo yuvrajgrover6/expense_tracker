@@ -9,7 +9,7 @@ import { QueryResult, useQuery } from "@apollo/client";
 import GET_USER from "./graphql/queries/user.query";
 import { Toaster } from "react-hot-toast";
 export default function App() {
-  const { loading, data, error }: QueryResult | undefined = useQuery(GET_USER);
+  const { loading, data }: QueryResult | undefined = useQuery(GET_USER);
   if (loading) return null;
   let authUser = data?.authUser;
   return (

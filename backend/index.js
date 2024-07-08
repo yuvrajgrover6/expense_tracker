@@ -11,7 +11,11 @@ import session from 'express-session';
 import ConnectMongoDBSession from 'connect-mongodb-session';
 import { buildContext } from 'graphql-passport';
 import { configurePassport } from './passport/passport.config.js';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
@@ -39,6 +43,13 @@ app.use(
         },
         store: store
     })
+);
+
+
+app.use(express.static(join(__dirname, '../frontend/dist')));
+app.get("*", (req, res) => {
+    res.sendFile(join(__dirname, '../frontend/dist', 'index.html'));
+}
 );
 
 app.use(passport.initialize());
